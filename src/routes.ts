@@ -1,4 +1,6 @@
 import { Router } from 'express';
+import swaggerUi from 'swagger-ui-express';
+import apiSpec from '../swagger-doc.json';
 
 import * as BookController from './controllers/book';
 import * as UserController from './controllers/user';
@@ -17,3 +19,8 @@ router.get('/book/search', BookController.search);
 
 // User routes
 router.get('/user/all', UserController.all);
+
+if (process.env.NODE_ENV === 'development') {
+  router.use('/dev/api-docs', swaggerUi.serve);
+  router.get('/dev/api-docs', swaggerUi.setup(apiSpec));
+}

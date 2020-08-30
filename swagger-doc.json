@@ -1,0 +1,378 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "API Service",
+      "version": "1.0.0",
+      "description": "API Service endpoints",
+      "contact": {
+        "email": "vigneshkundhanam@gmail.com",
+        "name": "K V Vignesh"
+      }
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000/api/"
+      }
+    ],
+    "tags": [
+      {
+        "name": "Auth Controller",
+        "description": "Auth APIs"
+      },
+      {
+        "name": "Book Controller",
+        "description": "Books APIs"
+      },
+      {
+        "name": "User Controller",
+        "description": "User APIs"
+      }
+    ],
+    "paths": {
+      "/login": {
+        "post": {
+          "tags": [
+            "Auth Controller"
+          ],
+          "summary": "To get the JWT Token",
+          "operationId": "login",
+          "requestBody": {
+            "description": "Login Details",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftLoginSchema"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Login Successful",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DraftTokenSchema"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Server error"
+            }
+          }
+        }
+      },
+      "/register": {
+        "post": {
+          "tags": [
+            "Auth Controller"
+          ],
+          "summary": "Register user",
+          "operationId": "user-add",
+          "requestBody": {
+            "description": "New user",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftUserSchema"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User added",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/UserSchema"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Server error"
+            }
+          }
+        }
+      },
+      "/book/add": {
+        "post": {
+          "tags": [
+            "Book Controller"
+          ],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "summary": "Add a book to the database",
+          "operationId": "book-add",
+          "requestBody": {
+            "description": "New book",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftBookSchema"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Book was added",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/DraftBookSchema"
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Server error"
+            }
+          }
+        }
+      },
+      "/book/all": {
+        "get": {
+          "tags": [
+            "Book Controller"
+          ],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "summary": "Get all books in database",
+          "operationId": "book-get-all",
+          "responses": {
+            "200": {
+              "description": "Search results",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "books": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/BookSchema"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Server error"
+            }
+          }
+        }
+      },
+      "/book/search": {
+        "get": {
+          "tags": [
+            "Book Controller"
+          ],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "summary": "Search books by name or author",
+          "operationId": "book-search",
+          "parameters": [
+            {
+              "in": "query",
+              "name": "name",
+              "schema": {
+                "type": "string",
+                "default": "hitchhiker"
+              },
+              "description": "String containing full name or partial name of the book"
+            },
+            {
+              "in": "query",
+              "name": "author",
+              "schema": {
+                "type": "string",
+                "default": "douglas"
+              },
+              "description": "String containing full name or partial name of the author"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Search results",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "books": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/BookSchema"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Server error"
+            }
+          }
+        }
+      },
+      "/user/all": {
+        "get": {
+          "tags": [
+            "User Controller"
+          ],
+          "security": [
+            {
+              "bearerAuth": []
+            }
+          ],
+          "summary": "Get all users in database",
+          "operationId": "user-get-all",
+          "responses": {
+            "200": {
+              "description": "Search results",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "properties": {
+                      "books": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/UserSchema"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Server error"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      },
+      "schemas": {
+        "DraftLoginSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "vigneshkundhanam@gmail.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "*****"
+            }
+          }
+        },
+        "DraftTokenSchema": {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IksgViBWaWduZXNoIiwiaWF0IjoxNTE2MjM5MDIyfQ.jojFHaz65uekOjgkmVbcOIazOoWQSubROkxJmJwIWBE"
+            },
+            "_id": {
+              "type": "string",
+              "example": "5d7224d3b40b1a1a046697dd"
+            }
+          }
+        },
+        "DraftBookSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "example": "The Super Boy's Guide to the developer"
+            },
+            "author": {
+              "type": "string",
+              "example": "K V Vignesh"
+            }
+          }
+        },
+        "BookSchema": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/DraftBookSchema"
+            }
+          ],
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "5d7224d3b40b1a1a046697dd"
+            }
+          }
+        },
+        "DraftUserSchema": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "example": "vigneshkundhanam@gmail.com"
+            },
+            "password": {
+              "type": "string",
+              "example": "*****"
+            },
+            "firstName": {
+              "type": "string",
+              "example": "K V"
+            },
+            "lastName": {
+              "type": "string",
+              "example": "Vignesh"
+            }
+          }
+        },
+        "UserSchema": {
+          "allOf": [
+            {
+              "$ref": "#/components/schemas/DraftUserSchema"
+            }
+          ],
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "5d7224d3b40b1a1a046697dd"
+            },
+            "createdOn": {
+              "type": "string",
+              "example": "2020-07-05T13:39:56.665+00:00"
+            },
+            "updatedOn": {
+              "type": "string",
+              "example": "2020-07-05T13:39:56.665+00:00"
+            }
+          }
+        }
+      }
+    }
+  }

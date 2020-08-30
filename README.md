@@ -11,6 +11,7 @@ A few things to note in the project:
 * **Winston Logger** - Uses winston as the logger for the application.
 * **ESLINT** - ESLINT is configured for linting.
 * **Jest** - Using Jest for running test cases
+* **Swagger** - Open API Specification
 
 ## Installation
 
